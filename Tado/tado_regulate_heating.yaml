@@ -1,14 +1,3 @@
-# home-assistant-config
-Any useful Home Assistant Config I can share
-
-## Tado - Regulate temperature using the offset
-Like many people who enjoy home automation, Home Assistant and have a Tado system I have been wanting to do a little more to manage my Tado thermostats, especially my TRVs to have them register the real temp in the room. Therefore, I set about adding the ability to get and set the offset for Tado devices in Home Assistant. This was implemented in the 2021.2 release of Home Assistant
-
-Now that we have access to the offset we can use that to keep the device temp in sync with another thermostat in the room, placed in a better location than on the radiator (like the Tado TRVs are)
-
-To take advantage of this I wanted one automation to handle the whole thing and allow me the flexibility to have different settings per device should I choose. I've created said automation and am sharing here for others to use should they wish. Its below for ease or the file can be downloaded from the Tado directory
-
-```
 # Regulate tado heating equipment based on external sensors.
 
 # For this to work you need to use a standard naming convention for every tado/external thermostat pairing. So each of them must be names the same i.e. 'bedroom'
@@ -27,7 +16,6 @@ To take advantage of this I wanted one automation to handle the whole thing and 
 #   The automation is set as a queued automation with many triggers. It has a delay at the end to allow the Tado device and integration time to sync up
 #   the same room could get triggered multiple times, this delay and queue allows time between each run and will prevent multiple offset updates
 #   NB queue only queues the action section, hence having some conditions to cancel as soon as triggered if needed and also repeated in action
-
   - id: automation.regulate_heating
     alias: Regulate Heating
     mode: queued
@@ -161,4 +149,3 @@ To take advantage of this I wanted one automation to handle the whole thing and 
         offset: "{{ offset }}"
     # Stop re triggers for a period allowing offset to have some effect and Tado Integration to refresh, new runs will be queued
     - delay: 60
-```

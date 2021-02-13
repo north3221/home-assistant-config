@@ -8,6 +8,8 @@ Now that we have access to the offset we can use that to keep the device temp in
 
 To take advantage of this I wanted one automation to handle the whole thing and allow me the flexibility to have different settings per device should I choose. I've created said automation and am sharing here for others to use should they wish. Its below for ease or the file can be downloaded from the Tado directory
 
+NB there is a back off setting but that requires a further code update to Tado integration I have written. I'll get a PR in for that, for now it just wont do anything for others (doesnt break anything just wont have any effect)
+
 ```
 # Regulate tado heating equipment based on external sensors.
 

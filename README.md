@@ -112,7 +112,7 @@ NB there is a back off setting but that requires a further code update to Tado i
         sensor_id: "{{ 'sensor.' + object_id + sensor_ns }}"
     
     # Conditions to check initially and cancel out the run if needed.
-    # NB they will be recheck again in action in case anything changed which waiting to run
+    # NB they will be recheck again in action in case anything changed while waiting to run
     #    so if you decide to remove any, make sure you remove in both
     condition:
     # Only run if temp states are a number i.e. hasn't become 'unavailable'
@@ -120,7 +120,7 @@ NB there is a back off setting but that requires a further code update to Tado i
     - "{{ states(climate_sensor_id)|int != 0 or states(climate_sensor_id) == '0' }}"
     # Only run if the climate device is set to 'auto' and preset is 'home'
     - "{{ states(climate_id) == 'auto' and state_attr(climate_id, 'preset_mode') == 'home' }}"
-    #Need to drop straight to action as queuing runs so need to calculate variables when they drop off queue not before
+    # Queuing only queues the action section so some variables need to be created here so caculated at relevant time
     action:
     - variables:
         offset: "{{ ((states(sensor_id)|float - states(climate_sensor_id)|float) + state_attr(climate_id, 'offset_celsius')|float)|round(1) }}"
@@ -131,10 +131,10 @@ NB there is a back off setting but that requires a further code update to Tado i
     # All conditions are optional, so just delete the ones you don't want to use
     - condition: and
       conditions:
-        # Only run if temp states are a number
+        # Only run if temp states are a number (is also check before queuing so if you remove, you need to remove from there too)
         - "{{ states(sensor_id)|int != 0 or states(sensor_id) == '0' }}"
         - "{{ states(climate_sensor_id)|int != 0 or states(climate_sensor_id) == '0' }}"
-        # Only run if the climate device is set to 'auto' and preset is 'home'
+        # Only run if the climate device is set to 'auto' and preset is 'home' (is also check before queuing so if you remove, you need to remove from there too)
         - "{{ states(climate_id) == 'auto' and state_attr(climate_id, 'preset_mode') == 'home' }}"
         # Only run if new_offset is different to current offset
         - "{{ state_attr(climate_id, 'offset_celsius')|float != offset|float }}"

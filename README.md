@@ -10,7 +10,7 @@ To take advantage of this I wanted one automation to handle the whole thing and 
 
 NB there is a back off setting but that requires a further code update to Tado integration I have written. I'll get a PR in for that, for now it just wont do anything for others (doesnt break anything just wont have any effect)
 
-```
+```yml
 # Regulate tado heating equipment based on external sensors.
 
 # For this to work you need to use a standard naming convention for every tado/external thermostat pairing. So each of them must be names the same i.e. 'bedroom'

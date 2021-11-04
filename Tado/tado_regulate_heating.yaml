@@ -113,7 +113,7 @@
         offset: "{{ ((states(sensor_id)|float - states(climate_sensor_id)|float) + state_attr(climate_id, 'offset_celsius')|float)|round(1) }}"
         new_temp: "{{ state_attr(climate_id, 'current_temperature') - state_attr(climate_id, 'offset_celsius') + offset|float }}"
         last_updated: >
-          {{ state_attr(climate_id, 'offset_last_changed') if state_attr(climate_id, 'offset_last_changed') != None else utcnow() - timedelta(seconds=(back_off_secs|int +100)) }}
+          {{ state_attr('this', 'last_triggered') if state_attr('this', 'last_triggered') != None else utcnow() - timedelta(seconds=(back_off_secs|int +100)) }}
 
     # All conditions are optional, so just delete the ones you don't want to use
     - condition: and

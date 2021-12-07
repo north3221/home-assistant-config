@@ -117,7 +117,7 @@ NB there is a back off setting but that requires a further code update to Tado i
     condition:
     # Only run if temp states are a number i.e. hasn't become 'unavailable'
     - "{{ is_number(states(sensor_id)) }}"
-    - "{{ states(climate_sensor_id)|int != 0 or states(climate_sensor_id) == '0' }}"
+    - "{{ is_number(states(climate_sensor_id)) }}"
     # Only run if the climate device is set to 'auto' and preset is 'home'
     - "{{ states(climate_id) == 'auto' and state_attr(climate_id, 'preset_mode') == 'home' }}"
     # Queuing only queues the action section so some variables need to be created here so caculated at relevant time
@@ -133,7 +133,7 @@ NB there is a back off setting but that requires a further code update to Tado i
       conditions:
         # Only run if temp states are a number (is also check before queuing so if you remove, you need to remove from there too)
         - "{{ is_number(states(sensor_id)) }}"
-        - "{{ states(climate_sensor_id)|int != 0 or states(climate_sensor_id) == '0' }}"
+        - "{{ is_number(states(climate_sensor_id)) }}"
         # Only run if the climate device is set to 'auto' and preset is 'home' (is also check before queuing so if you remove, you need to remove from there too)
         - "{{ states(climate_id) == 'auto' and state_attr(climate_id, 'preset_mode') == 'home' }}"
         # Only run if new_offset is different to current offset

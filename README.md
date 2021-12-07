@@ -132,7 +132,7 @@ NB there is a back off setting but that requires a further code update to Tado i
     - condition: and
       conditions:
         # Only run if temp states are a number (is also check before queuing so if you remove, you need to remove from there too)
-        - "{{ states(sensor_id)|int != 0 or states(sensor_id) == '0' }}"
+        - "{{ is_number(states(sensor_id)) }}"
         - "{{ states(climate_sensor_id)|int != 0 or states(climate_sensor_id) == '0' }}"
         # Only run if the climate device is set to 'auto' and preset is 'home' (is also check before queuing so if you remove, you need to remove from there too)
         - "{{ states(climate_id) == 'auto' and state_attr(climate_id, 'preset_mode') == 'home' }}"

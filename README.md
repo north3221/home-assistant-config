@@ -116,7 +116,7 @@ NB there is a back off setting but that requires a further code update to Tado i
     #    so if you decide to remove any, make sure you remove in both
     condition:
     # Only run if temp states are a number i.e. hasn't become 'unavailable'
-    - "{{ states(sensor_id)|int != 0 or states(sensor_id) == '0' }}"
+    - "{{ is_number(states(sensor_id)) }}"
     - "{{ states(climate_sensor_id)|int != 0 or states(climate_sensor_id) == '0' }}"
     # Only run if the climate device is set to 'auto' and preset is 'home'
     - "{{ states(climate_id) == 'auto' and state_attr(climate_id, 'preset_mode') == 'home' }}"

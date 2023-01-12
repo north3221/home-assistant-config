@@ -1,0 +1,435 @@
+    - id: automation.smart_meter_device_registry
+      alias: Smart Meter Device Registry
+      trigger_variables:
+        glow_id: "YOUR_ID"
+      trigger:
+        - platform: mqtt
+          topic: "{{ 'glow/' ~ glow_id ~ '/STATE' }}"
+          value_template: "{{ value_json.software }}"
+          
+      
+      action:
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/electricity_export/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "energy",
+                    "enabled_by_default": true,
+                    "json_attributes_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter' }}",
+                    "name": "Electricity: Export",
+                    "state_class": "total_increasing",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter' }}",
+                    "unique_id": "{{ glow_id }}_elec_export",
+                    "unit_of_measurement": "kWh",
+                    "value_template": {% raw %}"{{ value_json['electricitymeter']['energy']['export']['cumulative'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/electricity_import/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "energy",
+                    "enabled_by_default": true,
+                    "json_attributes_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter' }}",
+                    "name": "Electricity: Import",
+                    "state_class": "total_increasing",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter' }}",
+                    "unique_id": "{{ glow_id }}_elec_import",
+                    "unit_of_measurement": "kWh",
+                    "value_template": {% raw %}"{{ value_json['electricitymeter']['energy']['import']['cumulative'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/electricity_import_day/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "energy",
+                    "enabled_by_default": true,
+                    "name": "Electricity: Import Day",
+                    "state_class": "total_increasing",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter' }}",
+                    "unique_id": "{{ glow_id }}_elec_import_day",
+                    "unit_of_measurement": "kWh",
+                    "value_template": {% raw %}"{{ value_json['electricitymeter']['energy']['import']['day'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/electricity_import_week/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "energy",
+                    "enabled_by_default": true,
+                    "name": "Electricity: Import Week",
+                    "state_class": "total_increasing",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter' }}",
+                    "unique_id": "{{ glow_id }}_elec_import_week",
+                    "unit_of_measurement": "kWh",
+                    "value_template": {% raw %}"{{ value_json['electricitymeter']['energy']['import']['week'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/electricity_import_month/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "energy",
+                    "enabled_by_default": true,
+                    "name": "Electricity: Import Month",
+                    "state_class": "total_increasing",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter' }}",
+                    "unique_id": "{{ glow_id }}_elec_import_month",
+                    "unit_of_measurement": "kWh",
+                    "value_template": {% raw %}"{{ value_json['electricitymeter']['energy']['import']['month'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/electricity_import_unit_rate/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "monetary",
+                    "enabled_by_default": true,
+                    "name": "Electricity: Import Unit Rate",
+                    "state_class": "measurement",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter' }}",
+                    "unique_id": "{{ glow_id }}_elec_import_unit_rate",
+                    "unit_of_measurement": "GBP/kWh",
+                    "value_template": {% raw %}"{{ value_json['electricitymeter']['energy']['import']['price']['unitrate'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/electricity_import_standing_charge/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "monetary",
+                    "enabled_by_default": true,
+                    "name": "Electricity: Standing Charge",
+                    "state_class": "measurement",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter' }}",
+                    "unique_id": "{{ glow_id }}_elec_standing_charge",
+                    "unit_of_measurement": "GBP",
+                    "value_template": {% raw %}"{{ value_json['electricitymeter']['energy']['import']['price']['standingcharge'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/electricity_power/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "power",
+                    "enabled_by_default": true,
+                    "name": "Electricity: Power",
+                    "state_class": "measurement",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter' }}",
+                    "unique_id": "{{ glow_id }}_elec_power",
+                    "unit_of_measurement": "kW",
+                    "value_template": {% raw %}"{{ value_json['electricitymeter']['power']['value'] }}"{% endraw %}
+                }
+                
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/gas_import/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "energy",
+                    "enabled_by_default": true,
+                    "json_attributes_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/gasmeter' }}",
+                    "name": "Gas: Import",
+                    "state_class": "total_increasing",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/gasmeter' }}",
+                    "unique_id": "{{ glow_id }}_gas_import",
+                    "unit_of_measurement": "kWh",
+                    "icon": "mdi:fire",
+                    "value_template": {% raw %}"{{ value_json['gasmeter']['energy']['import']['cumulative'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/gas_import_day/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "energy",
+                    "enabled_by_default": true,
+                    "name": "Gas: Import Day",
+                    "state_class": "total_increasing",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/gasmeter' }}",
+                    "unique_id": "{{ glow_id }}_gas_import_day",
+                    "unit_of_measurement": "kWh",
+                    "icon": "mdi:fire",
+                    "value_template": {% raw %}"{{ value_json['gasmeter']['energy']['import']['day'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/gas_import_week/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "energy",
+                    "enabled_by_default": true,
+                    "name": "Gas: Import Week",
+                    "state_class": "total_increasing",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/gasmeter' }}",
+                    "unique_id": "{{ glow_id }}_gas_import_week",
+                    "unit_of_measurement": "kWh",
+                    "icon": "mdi:fire",
+                    "value_template": {% raw %}"{{ value_json['gasmeter']['energy']['import']['week'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/gas_import_month/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "energy",
+                    "enabled_by_default": true,
+                    "name": "Gas: Import Month",
+                    "state_class": "total_increasing",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/gasmeter' }}",
+                    "unique_id": "{{ glow_id }}_gas_import_month",
+                    "unit_of_measurement": "kWh",
+                    "icon": "mdi:fire",
+                    "value_template": {% raw %}"{{ value_json['gasmeter']['energy']['import']['month'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/gas_import_unit_rate/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "monetary",
+                    "enabled_by_default": true,
+                    "name": "Gas: Import Unit Rate",
+                    "state_class": "measurement",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/gasmeter' }}",
+                    "unique_id": "{{ glow_id }}_gas_import_unit_rate",
+                    "unit_of_measurement": "GBP/kWh",
+                    "value_template": {% raw %}"{{ value_json['gasmeter']['energy']['import']['price']['unitrate'] }}"{% endraw %}
+                }
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/gas_import_standing_charge/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "monetary",
+                    "enabled_by_default": true,
+                    "name": "Gas: Standing Charge",
+                    "state_class": "measurement",
+                    "state_topic": "{{ 'glow/' ~ glow_id ~ '/SENSOR/gasmeter' }}",
+                    "unique_id": "{{ glow_id }}_gas_standing_charge",
+                    "unit_of_measurement": "GBP",
+                    "value_template": {% raw %}"{{ value_json['gasmeter']['energy']['import']['price']['standingcharge'] }}"{% endraw %}
+                }
+          # DELETE this one if you dont have peak/offpeak tariff      
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/electricity_import_unit_rate_peak/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "monetary",
+                    "enabled_by_default": true,
+                    "name": "Electricity: Import Unit Rate Peak",
+                    "state_class": "measurement",
+                    "state_topic": "glow/{{ glow_id }}/SENSOR/electricitymeter/peak",
+                    "unique_id": "{{ glow_id }}_elec_import_unit_rate_peak",
+                    "unit_of_measurement": "GBP/kWh"
+                }
+          # DELETE this one if you dont have peak/offpeak tariff 
+          - service: mqtt.publish
+            data_template:
+              topic: "{{ 'homeassistant/sensor/' ~ glow_id ~ '/electricity_import_unit_rate_off_peak/config' }}"
+              payload: >-
+                {
+                    "device": {
+                        "identifiers": "[{{ glow_id }}]",
+                        "name": "Glow IHD Smart Meter",
+                        "manufacturer": "Hildebrand",
+                        "model": "{{ trigger.payload_json.smetsversion }}",
+                        "hw_version": "{{ trigger.payload_json.hardware }}",
+                        "sw_version": "{{ trigger.payload_json.software}}"
+                        
+                    },
+                    "device_class": "monetary",
+                    "enabled_by_default": true,
+                    "name": "Electricity: Import Unit Rate Off Peak",
+                    "state_class": "measurement",
+                    "state_topic": "glow/{{ glow_id }}/SENSOR/electricitymeter/offpeak",
+                    "unique_id": "{{ glow_id }}_elec_import_unit_rate_off_peak",
+                    "unit_of_measurement": "GBP/kWh"
+                }       
+                
+          - service: automation.turn_off
+            data: {}
+            target:
+              entity_id: automation.smart_meter_device_registry
+              
+              
+    - id: automation.smart_meter_device_registry_activate
+      alias: Smart Meter Device Registry Activate
+      trigger:
+        - platform: homeassistant
+          event: start
+          
+      action:
+        - service: automation.turn_on
+          data: {}
+          target:
+            entity_id: automation.smart_meter_device_registry
+            
+    # DELETE: this one if you dont have peak/offpeak tariff         
+    - id: automation.update_elec_peak_offpeak_rates
+      alias: Update Peak and Off Peak Rates of Smart Meter
+      trigger:
+        - platform: state
+          entity_id: sensor.electricity_import_unit_rate
+          
+      condition:
+        # Only run if states are a number i.e. hasn't become 'unavailable'
+        - "{{ is_number(trigger.to_state.state) }}"
+        - "{{ is_number(trigger.from_state.state) }}"
+      
+      action:
+        - variables:
+            glow_id: "YOUR_ID"
+            rate_type: "{{ 'peak' if trigger.to_state.state|float > trigger.from_state.state|float else 'offpeak' }}"
+        - service: mqtt.publish
+          data_template:
+            topic: "{{ 'glow/' ~ glow_id ~ '/SENSOR/electricitymeter/' ~ rate_type }}"
+            payload: "{{ trigger.to_state.state }}"
+            retain: true
+        # DELETE: Only needed if you are using Utility Meter(s) and want to set tariff at same time as this
+        - service: select.select_option
+          target:
+            entity_id:
+                - select.YOUR_UTILITY_METER
+          data:
+            option: "{{ rate_type }}"
+                
